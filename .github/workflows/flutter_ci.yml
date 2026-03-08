@@ -33,6 +33,7 @@
 #       - name: Build APK
 #         run: flutter build apk --release
 
+
 name: Flutter CI Pipeline
 
 on:
@@ -42,6 +43,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -64,3 +66,16 @@ jobs:
 
       - name: Build APK
         run: flutter build apk --release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flowchat-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: FlowChat Release v1.0.${{ github.run_number }}
+          files: build/app/outputs/flutter-apk/app-release.apk
