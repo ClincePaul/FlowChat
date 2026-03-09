@@ -38,7 +38,7 @@ class PrimaryButton extends ConsumerWidget {
           backgroundColor: btnColor,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.md),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
           ),
         ),
         child: isLoading

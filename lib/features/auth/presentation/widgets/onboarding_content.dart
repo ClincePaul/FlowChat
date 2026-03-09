@@ -34,7 +34,9 @@ class OnboardingContent extends StatelessWidget {
           const SizedBox(height:AppSpacing.md),
           Text(
             description,
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.normal,
+            ),
             textAlign: TextAlign.center,
           ),
         ],

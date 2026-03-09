@@ -1,4 +1,5 @@
 import 'package:flowchat/core/constants/app_assets.dart';
+import 'package:flowchat/core/state/theme/ui_theme_provider.dart';
 import 'package:flowchat/core/utils/tr.dart';
 import 'package:flowchat/core/widgets/Buttons/primary_button.dart';
 import 'package:flowchat/features/auth/data/model/onboarding_data.dart';
@@ -112,39 +113,39 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 dotWidth: 6,
                 expansionFactor: 4,
                 spacing: 6,
-                activeDotColor: Theme.of(context).colorScheme.primary,
+                activeDotColor: ref.watch(uiThemeProvider),
               ),
             ),
-    const SizedBox(height: AppSpacing.sm,),
- Padding(
-  padding: AppPadding.sm,
-  child: Text.rich(
-    TextSpan(
-      style: AppTextStyles.bodyLarge.copyWith(
-        fontWeight: FontWeight.w600
-      ),
-      children: [
-        TextSpan(text: tr(ref, "onb_privacy_txt_1")),
-        TextSpan(
-          text: tr(ref, "onb_privacy_policy"),
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: Theme.of(context).colorScheme.primary,
-            decoration: TextDecoration.underline,
-          ),
-        ),
-        TextSpan(text: tr(ref, "onb_privacy_txt_2")),
-        TextSpan(
-          text: tr(ref, "onb_terms"),
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: Theme.of(context).colorScheme.primary,
-            decoration: TextDecoration.underline,
-          ),
-        ),
-      ],
-    ),
-    textAlign: TextAlign.center,
-  ),
-),
+            const SizedBox(height: AppSpacing.sm),
+            Padding(
+              padding: AppPadding.sm,
+              child: Text.rich(
+                TextSpan(
+                  style: AppTextStyles.bodyLarge.copyWith(
+                    fontWeight: FontWeight.normal,
+                  ),
+                  children: [
+                    TextSpan(text: tr(ref, "onb_privacy_txt_1")),
+                    TextSpan(
+                      text: tr(ref, "onb_privacy_policy"),
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    TextSpan(text: tr(ref, "onb_privacy_txt_2")),
+                    TextSpan(
+                      text: tr(ref, "onb_terms"),
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
 
             Padding(
               padding: AppPadding.lg,

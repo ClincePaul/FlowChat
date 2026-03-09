@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppTextStyles {
 
-  static const displayLarge = TextStyle( fontSize: 26,fontWeight: FontWeight.bold,);
+  static const displayLarge = TextStyle( fontSize: 27,fontWeight: FontWeight.bold,);
 
 
 // -------------------------------------------Heading Text Category -----------------------------------------------

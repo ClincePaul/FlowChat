@@ -12,9 +12,9 @@ class AppTheme {
       headlineMedium: AppTextStyles.headlineMedium.copyWith(color: Colors.black),
       headlineSmall: AppTextStyles.headlineSmall.copyWith(color: Colors.black),
 
-      bodyLarge: AppTextStyles.bodyLarge.copyWith(color: Colors.black87),
-      bodyMedium: AppTextStyles.bodyMedium.copyWith(color: Colors.black87),
-      bodySmall: AppTextStyles.bodySmall.copyWith(color: Colors.black87),
+      bodyLarge: AppTextStyles.bodyLarge.copyWith(color: Colors.black),
+      bodyMedium: AppTextStyles.bodyMedium.copyWith(color: Colors.black),
+      bodySmall: AppTextStyles.bodySmall.copyWith(color: Colors.black),
 
       labelLarge: AppTextStyles.labelLarge.copyWith(color: Colors.grey.shade700),
       labelMedium: AppTextStyles.labelMedium.copyWith(color: Colors.grey.shade600),
