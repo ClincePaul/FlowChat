@@ -1,9 +1,13 @@
 import 'package:flowchat/routes/app_routes.dart';
 import 'package:flowchat/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
+   WidgetsFlutterBinding.ensureInitialized();
+  // Enable modern edge-to-edge layout
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   runApp(ProviderScope(child: const MyApp()));
 }
 
