@@ -1,5 +1,6 @@
 import 'package:flowchat/features/auth/presentation/view/onboarding_screen.dart';
-import 'package:flowchat/routes/transitions.dart';
+import 'package:flowchat/features/auth/presentation/view/sign_up_screen.dart';
+import 'package:flowchat/routes/transitions/zoom_in_transition.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/view/splash_screen.dart';
 import 'route_paths.dart';
@@ -14,12 +15,16 @@ class AppRouter {
     routes: [
       GoRoute(
         path: RoutePaths.splash,
-       pageBuilder: (context, state) => AppTransitions.fade(const SplashScreen() , state),
+       pageBuilder: (context, state) => Zoomintransition.zoom(const SplashScreen() , state),
        // builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: RoutePaths.onboarding,
-        builder: (context, state) => const OnboardingScreen(),
+       pageBuilder: (context, state) => Zoomintransition.zoom(const OnboardingScreen(), state),
+      ),
+      GoRoute(
+        path: RoutePaths.signup,
+       pageBuilder: (context, state) => Zoomintransition.zoom(const SignUpScreen(), state),
       ),
       // GoRoute(
       //   path: RoutePaths.dashboard,

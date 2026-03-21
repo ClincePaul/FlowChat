@@ -37,8 +37,8 @@ class _SplashScreenState extends State<SplashScreen> {
       case StartupRoute.dashboard:
         context.go(RoutePaths.dashboard);
         break;
-      case StartupRoute.login:
-        context.go(RoutePaths.login);
+      case StartupRoute.signIn:
+        context.go(RoutePaths.signup);
         break;
       case StartupRoute.onboarding:
         context.go(RoutePaths.onboarding);
@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           Expanded(
             child: Center(
-              child: Image.asset(AppAssets.splashimage, width: 230),
+              child: Image.asset(AppAssets.appIconText, width: 270),
             ),
           ),
 

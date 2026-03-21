@@ -22,33 +22,35 @@ class PrimaryButton extends ConsumerWidget {
     this.height = 45,
     this.icon,
     this.textStyle,
-
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final btnColor = ref.watch(uiThemeProvider);
-
+    final isDisabled = onPressed == null || isLoading;
     return SizedBox(
       width: double.infinity,
       height: height,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: btnColor,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.sm),
-          ),
-        ),
+        style:
+            ElevatedButton.styleFrom(
+              backgroundColor: btnColor,
+              disabledBackgroundColor: btnColor.withValues(alpha: 0.4),
+              foregroundColor: Colors.white,
+              disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+            ).copyWith(
+              mouseCursor: WidgetStateProperty.all(SystemMouseCursors.click),
+            ),
         child: isLoading
             ? SizedBox(
                 height: AppSpacing.lg,
                 width: AppSpacing.lg,
-                child: Lottie.asset(
-                  AppAssets.loading,
-                  height: 30,
-                ),
+                child: Lottie.asset(AppAssets.loading, height: 30),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -59,9 +61,14 @@ class PrimaryButton extends ConsumerWidget {
                   ],
                   Text(
                     text,
-                    style: textStyle ?? Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Colors.white,fontWeight: FontWeight.w600
-                    )
+                    style:
+                        textStyle ??
+                        Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: isDisabled
+                              ? Colors.white.withValues(alpha: 0.5)
+                              : Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
                 ],
               ),

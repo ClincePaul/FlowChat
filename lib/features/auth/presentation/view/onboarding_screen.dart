@@ -1,13 +1,16 @@
 import 'package:flowchat/core/constants/app_assets.dart';
 import 'package:flowchat/core/state/theme/ui_theme_provider.dart';
+import 'package:flowchat/core/utils/error_presenter.dart';
 import 'package:flowchat/core/utils/tr.dart';
-import 'package:flowchat/core/widgets/Buttons/primary_button.dart';
+import 'package:flowchat/core/widgets/buttons/primary_button.dart';
+import 'package:flowchat/di/core_di.dart';
 import 'package:flowchat/features/auth/data/model/onboarding_data.dart';
 import 'package:flowchat/features/auth/presentation/viewmodel/onboard_viewmodel.dart';
 import 'package:flowchat/features/auth/presentation/widgets/onboarding_content.dart';
 import 'package:flowchat/theme/base/app_padding.dart';
 import 'package:flowchat/theme/base/app_spacing.dart';
 import 'package:flowchat/theme/base/app_textstyle.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -24,13 +27,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   late OnboardingViewModel onboardViewModel;
 
   final int pageCount = 4;
+  bool _isOpeningLink = false;
 
   @override
   void initState() {
     super.initState();
 
     _controller = PageController();
-    onboardViewModel = OnboardingViewModel();
+    onboardViewModel = sl<OnboardingViewModel>();
 
     /// Start auto slide once
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -119,7 +123,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             const SizedBox(height: AppSpacing.sm),
             Padding(
               padding: AppPadding.sm,
-              child: Text.rich(
+              child:
+              
+               Text.rich(
                 TextSpan(
                   style: AppTextStyles.bodyLarge.copyWith(
                     fontWeight: FontWeight.normal,
@@ -129,22 +135,68 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     TextSpan(
                       text: tr(ref, "onb_privacy_policy"),
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Colors.blue,
                         decoration: TextDecoration.underline,
+                          decorationColor: Colors.blue,
                       ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          if (_isOpeningLink) return;
+
+                          _isOpeningLink = true;
+
+                          try {
+                            final error = await onboardViewModel
+                                .openPrivacyPolicy();
+
+                            if (error != null && context.mounted) {
+                              ErrorPresenter.show(
+                                context,
+                                tr(ref, error.messageKey),
+                                error,
+                              );
+                            }
+                          } finally {
+                            _isOpeningLink = false;
+                          }
+                        },
                     ),
                     TextSpan(text: tr(ref, "onb_privacy_txt_2")),
                     TextSpan(
                       text: tr(ref, "onb_terms"),
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Colors.blue,
                         decoration: TextDecoration.underline,
+                          decorationColor: Colors.blue,
                       ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          if (_isOpeningLink) return;
+
+                          _isOpeningLink = true;
+
+                          try {
+                            final error = await onboardViewModel
+                                .openTermsOfService();
+
+                            if (error != null && context.mounted) {
+                              ErrorPresenter.show(
+                                context,
+                                tr(ref, error.messageKey),
+                                error,
+                              );
+                            }
+                          } finally {
+                            _isOpeningLink = false;
+                          }
+                        },
                     ),
                   ],
                 ),
                 textAlign: TextAlign.center,
               ),
+           
+           
             ),
 
             Padding(
@@ -153,6 +205,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 text: tr(ref, "onb_agreeBtn"),
                 onPressed: () {
                   // onboardViewModel.dispose();
+                 onboardViewModel.onAgree(context);
                 },
               ),
             ),
