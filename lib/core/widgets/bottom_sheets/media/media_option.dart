@@ -1,5 +1,4 @@
 import 'package:flowchat/core/widgets/animations/staggered_slide_rotate.dart';
-import 'package:flowchat/core/widgets/animations/staggered_slide_up.dart';
 import 'package:flowchat/theme/animations/app_motion.dart';
 import 'package:flowchat/theme/base/app_icon_sizes.dart';
 import 'package:flowchat/theme/base/app_padding.dart';

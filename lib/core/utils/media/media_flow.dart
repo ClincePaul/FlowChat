@@ -28,7 +28,7 @@ class MediaFlow {
       _showActionSheet(
         context,
         ref,
-        currentFile!,
+        currentFile,
         onRemove,
         onPicked,
         onEdited,
