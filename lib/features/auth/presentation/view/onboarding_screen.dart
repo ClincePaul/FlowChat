@@ -3,13 +3,13 @@ import 'package:flowchat/core/state/theme/ui_theme_provider.dart';
 import 'package:flowchat/core/utils/error_presenter.dart';
 import 'package:flowchat/core/utils/tr.dart';
 import 'package:flowchat/core/widgets/buttons/primary_button.dart';
-import 'package:flowchat/di/core_di.dart';
 import 'package:flowchat/features/auth/data/model/onboarding_data.dart';
-import 'package:flowchat/features/auth/presentation/viewmodel/onboard_viewmodel.dart';
+import 'package:flowchat/features/auth/presentation/providers/onboard_provider.dart';
+import 'package:flowchat/features/auth/presentation/viewmodel/onboard/onboard_viewmodel.dart';
 import 'package:flowchat/features/auth/presentation/widgets/onboarding_content.dart';
+import 'package:flowchat/theme/base/app_colors.dart';
 import 'package:flowchat/theme/base/app_padding.dart';
 import 'package:flowchat/theme/base/app_spacing.dart';
-import 'package:flowchat/theme/base/app_textstyle.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,193 +24,173 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   late PageController _controller;
-  late OnboardingViewModel onboardViewModel;
+  late OnboardingViewModel vm;
+  late TapGestureRecognizer _privacyTap;
+  late TapGestureRecognizer _termsTap;
 
   final int pageCount = 4;
-  bool _isOpeningLink = false;
 
   @override
   void initState() {
     super.initState();
-
     _controller = PageController();
-    onboardViewModel = sl<OnboardingViewModel>();
-
-    /// Start auto slide once
+    vm = ref.read(onboardingViewModelProvider.notifier);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      onboardViewModel.startAutoSlide(
-        controller: _controller,
-        pageCount: pageCount,
-      );
+      vm.startAutoSlide(controller: _controller, pageCount: pageCount);
     });
+
+    _privacyTap = TapGestureRecognizer()
+      ..onTap = () async {
+        final error = await vm.openPrivacyPolicy();
+
+        if (error != null && mounted) {
+          ErrorPresenter.show(
+            context,
+            error.messageKey, // 👈 no tr here
+            error,
+          );
+        }
+      };
+
+    _termsTap = TapGestureRecognizer()
+      ..onTap = () async {
+        final error = await vm.openTermsOfService();
+
+        if (error != null && mounted) {
+          ErrorPresenter.show(context, error.messageKey, error);
+        }
+      };
+  }
+
+  void _restartAutoSlide() {
+    vm.stopAutoSlide();
+    vm.startAutoSlide(controller: _controller, pageCount: pageCount);
   }
 
   @override
   void dispose() {
-    onboardViewModel.dispose();
+    vm.stopAutoSlide();
     _controller.dispose();
+    _privacyTap.dispose();
+    _termsTap.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(onboardingViewModelProvider);
     final pages = [
       OnboardingData(
         image: AppAssets.onboardWelcome,
-        title: tr(ref, "onb_title_1"),
-        description: tr(ref, "onb_desc_1"),
+        title: tr(context, "onb_title_1"),
+        description: tr(context, "onb_desc_1"),
       ),
       OnboardingData(
         image: AppAssets.onboardSecurity,
-        title: tr(ref, "onb_title_2"),
-        description: tr(ref, "onb_desc_2"),
+        title: tr(context, "onb_title_2"),
+        description: tr(context, "onb_desc_2"),
       ),
       OnboardingData(
         image: AppAssets.onboardMeeting,
-        title: tr(ref, "onb_title_3"),
-        description: tr(ref, "onb_desc_3"),
+        title: tr(context, "onb_title_3"),
+        description: tr(context, "onb_desc_3"),
       ),
       OnboardingData(
         image: AppAssets.onboardStayConnected,
-        title: tr(ref, "onb_title_4"),
-        description: tr(ref, "onb_desc_4"),
+        title: tr(context, "onb_title_4"),
+        description: tr(context, "onb_desc_4"),
       ),
     ];
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onPanDown: (_) => onboardViewModel.stopAutoSlide(),
-                onPanCancel: () => onboardViewModel.startAutoSlide(
-                  controller: _controller,
-                  pageCount: pageCount,
-                ),
-                onPanEnd: (_) => onboardViewModel.startAutoSlide(
-                  controller: _controller,
-                  pageCount: pageCount,
-                ),
-                child: PageView.builder(
-                  controller: _controller,
-                  itemCount: pages.length,
-                  onPageChanged: (index) {
-                    onboardViewModel.updateIndex(index);
-                  },
-                  itemBuilder: (context, index) {
-                    final page = pages[index];
-                    return OnboardingContent(
-                      imagePath: page.image,
-                      title: page.title,
-                      description: page.description,
-                    );
-                  },
-                ),
+      body: Column(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onPanDown: (_) => vm.stopAutoSlide(),
+              onPanCancel: () => _restartAutoSlide(),
+              onPanEnd: (_) => _restartAutoSlide(),
+              child: PageView.builder(
+                controller: _controller,
+                itemCount: pages.length,
+                onPageChanged: (index) {
+                  vm.updateIndex(index);
+                },
+                itemBuilder: (context, index) {
+                  final page = pages[index];
+                  return OnboardingContent(
+                    imagePath: page.image,
+                    title: page.title,
+                    description: page.description,
+                  );
+                },
               ),
             ),
-            SmoothPageIndicator(
-              controller: _controller,
-              count: pages.length,
-              effect: ExpandingDotsEffect(
-                dotHeight: 6,
-                dotWidth: 6,
-                expansionFactor: 4,
-                spacing: 6,
-                activeDotColor: ref.watch(uiThemeProvider),
-              ),
+          ),
+      
+          /// 🔵 Indicator
+          SmoothPageIndicator(
+            controller: _controller,
+            count: pages.length,
+            effect: ExpandingDotsEffect(
+              dotHeight: 6,
+              dotWidth: 6,
+              expansionFactor: 4,
+              spacing: 6,
+              activeDotColor: ref.watch(uiThemeProvider),
             ),
-            const SizedBox(height: AppSpacing.sm),
-            Padding(
-              padding: AppPadding.sm,
-              child:
-              
-               Text.rich(
+          ),
+      
+          const SizedBox(height: AppSpacing.sm),
+      
+          /// 🔐 Privacy + Terms
+          Padding(
+            padding: AppPadding.sm,
+            child: IgnorePointer(
+              ignoring: state.isOpeningLink,
+              child: Text.rich(
                 TextSpan(
-                  style: AppTextStyles.bodyLarge.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.normal,
                   ),
                   children: [
-                    TextSpan(text: tr(ref, "onb_privacy_txt_1")),
+                    TextSpan(text: tr(context, "onb_privacy_txt_1")),
                     TextSpan(
-                      text: tr(ref, "onb_privacy_policy"),
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: Colors.blue,
+                      text: tr(context, "onb_privacy_policy"),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: AppColors.info,
                         decoration: TextDecoration.underline,
-                          decorationColor: Colors.blue,
+                        decorationColor: AppColors.info,
                       ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () async {
-                          if (_isOpeningLink) return;
-
-                          _isOpeningLink = true;
-
-                          try {
-                            final error = await onboardViewModel
-                                .openPrivacyPolicy();
-
-                            if (error != null && context.mounted) {
-                              ErrorPresenter.show(
-                                context,
-                                tr(ref, error.messageKey),
-                                error,
-                              );
-                            }
-                          } finally {
-                            _isOpeningLink = false;
-                          }
-                        },
+                      recognizer: _privacyTap,
                     ),
-                    TextSpan(text: tr(ref, "onb_privacy_txt_2")),
+                    TextSpan(text: tr(context, "onb_privacy_txt_2")),
                     TextSpan(
-                      text: tr(ref, "onb_terms"),
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: Colors.blue,
+                      text: tr(context, "onb_terms"),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: AppColors.info,
                         decoration: TextDecoration.underline,
-                          decorationColor: Colors.blue,
+                        decorationColor: AppColors.info,
                       ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () async {
-                          if (_isOpeningLink) return;
-
-                          _isOpeningLink = true;
-
-                          try {
-                            final error = await onboardViewModel
-                                .openTermsOfService();
-
-                            if (error != null && context.mounted) {
-                              ErrorPresenter.show(
-                                context,
-                                tr(ref, error.messageKey),
-                                error,
-                              );
-                            }
-                          } finally {
-                            _isOpeningLink = false;
-                          }
-                        },
+                      recognizer: _termsTap,
                     ),
                   ],
                 ),
                 textAlign: TextAlign.center,
               ),
-           
-           
             ),
-
-            Padding(
-              padding: AppPadding.lg,
-              child: PrimaryButton(
-                text: tr(ref, "onb_agreeBtn"),
-                onPressed: () {
-                  // onboardViewModel.dispose();
-                 onboardViewModel.onAgree(context);
-                },
-              ),
+          ),
+      
+          Padding(
+            padding: AppPadding.lg,
+            child: PrimaryButton(
+              text: tr(context, "onb_agreeBtn"),
+              onPressed: () {
+                vm.onAgree(context);
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -3,6 +3,7 @@ class AppAssets {
   static const appIconText                 = 'assets/images/app/app_icon_txt.png';
   static const appIcon                     = 'assets/images/app/app_icon.png';
   static const appIconTransparent          = 'assets/images/app/app_icon_transparent.png';
+
   static const onboardWelcome              = 'assets/images/onboard/onb_welcome.png';
   static const onboardSecurity             = 'assets/images/onboard/onb_security.png';
   static const onboardMeeting              = 'assets/images/onboard/onb_meet.png';
@@ -11,5 +12,8 @@ class AppAssets {
   static const faceBookIcon                = 'assets/images/auth/facebook_icon.png';
   static const googleIcon                  = 'assets/images/auth/google_icon.png';
 
+//lottie constats
   static const loading                     = 'assets/animations/loading.json';
+  static const nointernet                  = 'assets/animations/no_internet.json';
+  static const noData                      = 'assets/animations/no_data.json';
 }

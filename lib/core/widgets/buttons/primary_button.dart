@@ -1,5 +1,7 @@
 import 'package:flowchat/core/constants/app_assets.dart';
 import 'package:flowchat/core/state/theme/ui_theme_provider.dart';
+import 'package:flowchat/theme/base/app_button_size.dart';
+import 'package:flowchat/theme/base/app_icon_sizes.dart';
 import 'package:flowchat/theme/base/app_radius.dart';
 import 'package:flowchat/theme/base/app_spacing.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,7 @@ class PrimaryButton extends ConsumerWidget {
     required this.text,
     required this.onPressed,
     this.isLoading = false,
-    this.height = 45,
+    this.height = AppButtonSize.buttonHeight,
     this.icon,
     this.textStyle,
   });
@@ -36,12 +38,12 @@ class PrimaryButton extends ConsumerWidget {
         style:
             ElevatedButton.styleFrom(
               backgroundColor: btnColor,
-              disabledBackgroundColor: btnColor.withValues(alpha: 0.4),
+              disabledBackgroundColor: btnColor.withValues(alpha: 0.5),
               foregroundColor: Colors.white,
               disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppRadius.sm),
+                borderRadius: BorderRadius.circular(AppRadius.xl),
               ),
             ).copyWith(
               mouseCursor: WidgetStateProperty.all(SystemMouseCursors.click),
@@ -56,16 +58,16 @@ class PrimaryButton extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: 20),
+                    Icon(icon, size: AppIconSize.iconLg),
                     const SizedBox(width: AppSpacing.sm),
                   ],
                   Text(
                     text,
                     style:
                         textStyle ??
-                        Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        Theme.of(context).textTheme.headlineSmall!.copyWith(
                           color: isDisabled
-                              ? Colors.white.withValues(alpha: 0.5)
+                              ? Colors.white.withValues(alpha: 0.6)
                               : Colors.white,
                           fontWeight: FontWeight.w600,
                         ),

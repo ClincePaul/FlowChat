@@ -1,7 +1,8 @@
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LocaleNotifier extends StateNotifier<String> {
-  LocaleNotifier() : super("en");
+class LocaleNotifier extends Notifier<String> {
+  @override
+  String build() => "en";
 
   void changeLanguage(String code) {
     state = code;
@@ -9,6 +10,4 @@ class LocaleNotifier extends StateNotifier<String> {
 }
 
 final localeProvider =
-    StateNotifierProvider<LocaleNotifier, String>((ref) {
-  return LocaleNotifier();
-});
+    NotifierProvider<LocaleNotifier, String>(LocaleNotifier.new);

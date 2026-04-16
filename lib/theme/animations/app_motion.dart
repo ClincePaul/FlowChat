@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 
 class AppMotion {
   AppMotion._();
+  static const Duration ultrafast  = Duration(milliseconds: 50);
+  static const Duration veryfast   = Duration(milliseconds: 100);
   static const Duration fast       = Duration(milliseconds: 200);
   static const Duration medium     = Duration(milliseconds: 300);
   static const Duration mediumLow  = Duration(milliseconds: 400);

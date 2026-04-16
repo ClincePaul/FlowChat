@@ -18,7 +18,7 @@ class OnboardingContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppPadding.sm, 
+      padding: AppPadding.screenPadding, 
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,7 +34,7 @@ class OnboardingContent extends StatelessWidget {
           const SizedBox(height:AppSpacing.md),
           Text(
             description,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
               fontWeight: FontWeight.normal,
             ),
             textAlign: TextAlign.center,

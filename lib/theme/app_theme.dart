@@ -1,46 +1,57 @@
-import 'package:flowchat/theme/base/app_textstyle.dart';
+
+import 'package:flowchat/theme/base/typography/text_style_factory.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static final ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    colorScheme: const ColorScheme.light(),
-    textTheme: TextTheme(
-      displayLarge: AppTextStyles.displayLarge.copyWith(color: Colors.black),
+  static ThemeData lightTheme(Locale locale) {
+    final styles = TextStyleFactory.getStyles(locale);
 
-      headlineLarge: AppTextStyles.headlineLarge.copyWith(color: Colors.black),
-      headlineMedium: AppTextStyles.headlineMedium.copyWith(color: Colors.black),
-      headlineSmall: AppTextStyles.headlineSmall.copyWith(color: Colors.black),
+    return ThemeData(
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: const Color(0xFFF8FBFF),
 
-      bodyLarge: AppTextStyles.bodyLarge.copyWith(color: Colors.black),
-      bodyMedium: AppTextStyles.bodyMedium.copyWith(color: Colors.black),
-      bodySmall: AppTextStyles.bodySmall.copyWith(color: Colors.black),
+      textTheme: TextTheme(
+        displayLarge: styles.displayLarge.copyWith(color: Colors.black),
 
-      labelLarge: AppTextStyles.labelLarge.copyWith(color: Colors.grey.shade700),
-      labelMedium: AppTextStyles.labelMedium.copyWith(color: Colors.grey.shade600),
-      labelSmall: AppTextStyles.labelSmall.copyWith(color: Colors.grey.shade500),
-     
-    ),
-  );
+        headlineLarge: styles.headlineLarge.copyWith(color: Colors.black),
+        headlineMedium: styles.headlineMedium.copyWith(color: Colors.black),
+        headlineSmall: styles.headlineSmall.copyWith(color: Colors.black),
 
-//------------------------------------Dark Theme----------------------------------------------------------
+        bodyLarge: styles.bodyLarge.copyWith(color: Colors.black),
+        bodyMedium: styles.bodyMedium.copyWith(color: Colors.black),
+        bodySmall: styles.bodySmall.copyWith(color: Colors.black),
 
-  static final ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    colorScheme: const ColorScheme.dark(),
-    textTheme: TextTheme(
-      displayLarge: AppTextStyles.displayLarge.copyWith(color: Colors.white),
-      headlineLarge: AppTextStyles.headlineLarge.copyWith(color: Colors.white),
-      headlineMedium: AppTextStyles.headlineMedium.copyWith(color: Colors.white),
-      headlineSmall: AppTextStyles.headlineSmall.copyWith(color: Colors.black),
+        labelLarge: styles.labelLarge.copyWith(color: Colors.grey.shade700),
+        labelMedium: styles.labelMedium.copyWith(color: Colors.grey.shade600),
+        labelSmall: styles.labelSmall.copyWith(color: Colors.grey.shade500),
+      ),
+    );
+  }
 
-      bodyLarge: AppTextStyles.bodyLarge.copyWith(color: Colors.white70),
-      bodyMedium: AppTextStyles.bodyMedium.copyWith(color: Colors.white70),
-      bodySmall: AppTextStyles.bodySmall.copyWith(color: Colors.grey.shade700),
+  //------------------------------------Dark Theme----------------------------------------------------------
 
-      labelLarge: AppTextStyles.labelLarge.copyWith(color: Colors.grey.shade700),
-      labelMedium: AppTextStyles.labelMedium.copyWith(color: Colors.grey.shade600),
-      labelSmall: AppTextStyles.labelSmall.copyWith(color: Colors.grey.shade500),
-    ),
-  );
+  static ThemeData darkTheme(Locale locale) {
+    final styles = TextStyleFactory.getStyles(locale);
+
+    return ThemeData(
+      brightness: Brightness.dark,
+      colorScheme: const ColorScheme.dark(),
+
+      textTheme: TextTheme(
+        displayLarge: styles.displayLarge.copyWith(color: Colors.white),
+
+        headlineLarge: styles.headlineLarge.copyWith(color: Colors.white),
+        headlineMedium: styles.headlineMedium.copyWith(color: Colors.white),
+        headlineSmall: styles.headlineSmall.copyWith(color: Colors.white),
+
+        bodyLarge: styles.bodyLarge.copyWith(color: Colors.white70),
+        bodyMedium: styles.bodyMedium.copyWith(color: Colors.white70),
+        bodySmall: styles.bodySmall.copyWith(color: Colors.grey),
+
+        labelLarge: styles.labelLarge.copyWith(color: Colors.grey.shade700),
+        labelMedium: styles.labelMedium.copyWith(color: Colors.grey.shade600),
+        labelSmall: styles.labelSmall.copyWith(color: Colors.grey.shade500),
+      ),
+    );
+  }
 }

@@ -7,16 +7,23 @@ class Zoomintransition {
     return CustomTransitionPage(
       key: state.pageKey,
       child: child,
-      transitionDuration: AppMotion.mediumLow,
+      transitionDuration: AppMotion.medium,
+      reverseTransitionDuration: AppMotion.fast, 
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
 
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: AppMotion.enter,       
+          reverseCurve: AppMotion.exit,    
+        );
+
         final scaleTween = Tween<double>(
-          begin: 0.92,
+          begin: 0.00,
           end: 1.0,
-        ).chain(CurveTween(curve:AppMotion.enter));
+        );
 
         return ScaleTransition(
-          scale: animation.drive(scaleTween),
+          scale: curvedAnimation.drive(scaleTween),
           child: child,
         );
       },

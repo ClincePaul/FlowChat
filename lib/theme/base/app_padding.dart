@@ -25,4 +25,11 @@ class AppPadding {
   static const EdgeInsets verticalxl   =  EdgeInsets.symmetric(vertical: AppSpacing.xl);
   static const EdgeInsets verticalxxl  =  EdgeInsets.symmetric(vertical: AppSpacing.xxl);
 
+  //feature based paddings
+
+  static const EdgeInsets statusBannerPadding     = EdgeInsets.all(12);
+  static const EdgeInsets bottomSheetPadding      = EdgeInsets.all(8);
+  static const EdgeInsets textFieldContentPadding = EdgeInsets.all(8);
+  static const EdgeInsets screenPadding           = EdgeInsets.all(8);
+
 }

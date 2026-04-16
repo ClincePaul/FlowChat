@@ -29,60 +29,58 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _start() async {
-    final route = await _viewModel.decideRoute();
+  final route = await _viewModel.decideRoute();
 
-    if (!mounted) return;
+  if (!mounted) return;
 
-    switch (route) {
-      case StartupRoute.dashboard:
-        context.go(RoutePaths.dashboard);
-        break;
-      case StartupRoute.signIn:
-        context.go(RoutePaths.signup);
-        break;
-      case StartupRoute.onboarding:
-        context.go(RoutePaths.onboarding);
-        break;
-    }
+  switch (route) {
+    case StartupRoute.dashboard:
+      context.go(RoutePaths.dashboard);
+      break;
+
+    case StartupRoute.onboarding:
+      context.go(RoutePaths.onboarding);
+      break;
   }
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: Image.asset(AppAssets.appIconText, width: 270),
+      body: Padding(
+        padding: AppPadding.screenPadding,
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: Image.asset(AppAssets.appIconText, width: 270),
+              ),
             ),
-          ),
-
-          Padding(
-            padding: AppPadding.xs,
-            child: Consumer(
+        
+            Consumer(
               builder: (context, ref, child) {
                 return Text(
-                  tr(ref, "spl_txt1"),
+                  tr(context, "spl_txt1"),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodySmall,
                 );
               },
             ),
-          ),
-
-          Padding(
-            padding: EdgeInsets.only(bottom: AppSpacing.xl),
-            child: Consumer(
-              builder: (context, ref, child) {
-                return Text(
-                  tr(ref , "spl_txt2"),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall,
-                );
-              },
+        
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+              child: Consumer(
+                builder: (context, ref, child) {
+                  return Text(
+                    tr(context , "spl_txt2"),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -34,7 +34,7 @@ class _AppStatusBannerWidgetState extends State<AppStatusBannerWidget>
 
     controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: AppMotion.mediumLow,
     );
 
     fadeAnimation = Tween<double>(
@@ -63,6 +63,7 @@ class _AppStatusBannerWidgetState extends State<AppStatusBannerWidget>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Positioned(
       top: widget.screenHeight * 0.05,
       left: 20,
@@ -76,28 +77,40 @@ class _AppStatusBannerWidgetState extends State<AppStatusBannerWidget>
             child: ScaleTransition(
               scale: scaleAnimation,
               child: ClipRRect(
-                borderRadius:BorderRadius.circular(AppRadius.xs),
+                borderRadius: BorderRadius.circular(AppRadius.xs),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                   child: Container(
-                    padding: AppPadding.md,
+                    padding: AppPadding.statusBannerPadding,
                     decoration: BoxDecoration(
-                      
-                      borderRadius: BorderRadius.circular(8),
-                      color: const Color(0xFF323232).withValues(alpha: 0.75),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
+
+                      color: isDark
+                          ? const Color(0xFF1F2937).withValues(
+                              alpha: 0.85,
+                            ) // bluish dark
+                          : const Color(0xFFF3F4F6).withValues(alpha: 0.9),
+                      border: Border.all(
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.08)
+                            : Colors.black.withValues(alpha: 0.05),
+                      ),
                     ),
                     child: Row(
                       children: [
-                        Icon(widget.icon, color: Colors.white, size: 20),
+                        Icon(
+                          widget.icon,
+                          color: isDark ? Colors.white : Colors.black87,
+                          size: 20,
+                        ),
 
                         const SizedBox(width: 8),
 
                         Expanded(
                           child: Text(
                             widget.message,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: isDark ? Colors.white : Colors.black87,
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                             ),

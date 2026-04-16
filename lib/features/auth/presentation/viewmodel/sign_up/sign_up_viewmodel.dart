@@ -1,15 +1,14 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flowchat/core/utils/validators.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'sign_up_state.dart';
 
-final signUpProvider =
-    StateNotifierProvider<SignUpNotifier, SignUpState>(
-  (ref) => SignUpNotifier(),
-);
+class SignUpViewModel extends Notifier<SignUpState> {
+  @override
+  SignUpState build() {
+    return const SignUpState();
+  }
 
-class SignUpNotifier extends StateNotifier<SignUpState> {
-  SignUpNotifier() : super(const SignUpState());
-
+  /// 📧 Email change
   void onEmailChanged(String value) {
     final error = Validators.validateEmail(value);
 
@@ -19,11 +18,13 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     );
   }
 
+  /// 👤 Username change
   void onUsernameChanged(String value) {
     final error = Validators.validateUsername(value);
+
     state = state.copyWith(
       username: value,
-      userNameError: error
-      );
+      userNameError: error,
+    );
   }
 }

@@ -1,19 +1,15 @@
 import 'package:flowchat/theme/animations/app_motion.dart';
 import 'package:flutter/material.dart';
 import 'package:flowchat/core/constants/app_assets.dart';
-import 'package:flowchat/theme/base/app_textstyle.dart';
 
-class BrandedAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const BrandedAppBar({super.key});
-
-  @override
-  State<BrandedAppBar> createState() => _BrandedAppBarState();
+class BrandedHeader extends StatefulWidget {
+  const BrandedHeader({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(60);
+  State<BrandedHeader> createState() => _BrandedHeaderState();
 }
 
-class _BrandedAppBarState extends State<BrandedAppBar>
+class _BrandedHeaderState extends State<BrandedHeader>
     with TickerProviderStateMixin {
 
   late final AnimationController _textController;
@@ -29,19 +25,16 @@ class _BrandedAppBarState extends State<BrandedAppBar>
   void initState() {
     super.initState();
 
-    /// ✅ ICON CONTROLLER FIRST
     _iconController = AnimationController(
       vsync: this,
       duration: AppMotion.slow,
     );
 
-    /// ✅ TEXT CONTROLLER
     _textController = AnimationController(
       vsync: this,
-      duration:   AppMotion.verySlow,
+      duration: AppMotion.verySlow,
     );
 
-    /// TEXT ANIMATIONS
     _slide = Tween<Offset>(
       begin: const Offset(-0.3, 0),
       end: Offset.zero,
@@ -53,11 +46,9 @@ class _BrandedAppBarState extends State<BrandedAppBar>
     _textFade = Tween<double>(begin: 0, end: 1)
         .animate(_textController);
 
-    /// ICON FADE (IMPORTANT)
     _iconFade = Tween<double>(begin: 1, end: 0)
         .animate(_iconController);
 
-    /// start loop AFTER everything ready
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loop();
     });
@@ -66,23 +57,15 @@ class _BrandedAppBarState extends State<BrandedAppBar>
   Future<void> _loop() async {
     while (mounted) {
 
-      /// 🔹 STEP 1: ensure icon visible
       _iconController.reverse();
-
       await Future.delayed(AppMotion.medium);
 
-      /// 🔹 STEP 2: show text
       await _textController.forward();
-
       await Future.delayed(const Duration(seconds: 3));
 
-      /// 🔹 STEP 3: hide text
       await _textController.reverse();
-
-      /// 🔹 STEP 4: hide icon
       await _iconController.forward();
 
-      /// 🔹 wait before next loop
       await Future.delayed(const Duration(seconds: 3));
     }
   }
@@ -96,38 +79,35 @@ class _BrandedAppBarState extends State<BrandedAppBar>
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      title: Row(
-        children: [
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
 
-          /// ✅ ICON FADE (FIXED)
-          FadeTransition(
-            opacity: _iconFade,
-            child: Image.asset(
-              AppAssets.appIconTransparent,
-              height: 40,
-            ),
+        /// ICON
+        FadeTransition(
+          opacity: _iconFade,
+          child: Image.asset(
+            AppAssets.appIconTransparent,
+            height: 40,
           ),
+        ),
 
-        
+        const SizedBox(width: 8),
 
-          /// ✅ TEXT
-          ClipRect(
-            child: FadeTransition(
-              opacity: _textFade,
-              child: SlideTransition(
-                position: _slide,
-                child: Text(
-                  text,
-                  style: AppTextStyles.headlineSmall,
-                ),
+        /// TEXT
+        ClipRect(
+          child: FadeTransition(
+            opacity: _textFade,
+            child: SlideTransition(
+              position: _slide,
+              child: Text(
+                text,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

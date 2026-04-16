@@ -3,6 +3,8 @@ class RoutePaths {
 
   static const splash = '/';
   static const onboarding = '/Onboarding';
-  static const signup = '/signin';
+  static const signup = '/signup';
   static const dashboard = '/dashboard';
+
+  static const imagePreview = '/image-preview';
 }

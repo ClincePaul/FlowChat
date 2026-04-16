@@ -1,28 +1,34 @@
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum SignUpStep { email, otp, profile }
 
-class SignUpStepNotifier extends StateNotifier<SignUpStep> {
-  SignUpStepNotifier() : super(SignUpStep.email);
+class SignUpStepViewModel extends Notifier<SignUpStep> {
+  @override
+  SignUpStep build() {
+    return SignUpStep.email;
+  }
 
+  /// ➡️ Go to OTP
   void goToOtp() {
     state = SignUpStep.otp;
   }
 
+  /// ➡️ Go to Profile
   void goToProfile() {
     state = SignUpStep.profile;
   }
 
+  /// ⬅️ Back navigation
   void back() {
     if (state == SignUpStep.otp) {
       state = SignUpStep.email;
     } else if (state == SignUpStep.profile) {
-      state = SignUpStep.otp;
+      state = SignUpStep.email; // ✅ FIXED (better UX)
     }
   }
-}
 
-final signUpStepProvider =
-    StateNotifierProvider<SignUpStepNotifier, SignUpStep>(
-  (ref) => SignUpStepNotifier(),
-);
+  /// 🔄 Reset flow
+  void reset() {
+    state = SignUpStep.email;
+  }
+}

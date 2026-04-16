@@ -1,4 +1,4 @@
-enum StartupRoute { onboarding, signIn, dashboard }
+enum StartupRoute { onboarding, dashboard }
 
 class AppStartupUseCase {
   Future<StartupRoute> execute() async {
